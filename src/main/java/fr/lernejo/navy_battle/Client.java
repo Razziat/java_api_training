@@ -4,14 +4,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.ArrayList;
 
 public class Client {
     final private HttpClient client;
     final private Attack attack;
-    final private ArrayList<String> adversaryUrl;
+    final private List<String> adversaryUrl;
 
-    public ArrayList<String> getAdversaryUrl() {
+    public List<String> getAdversaryUrl() {
         return adversaryUrl;
     }
 
@@ -21,35 +22,33 @@ public class Client {
         adversaryUrl = new ArrayList<>(1);
     }
 
-    private HttpClient createClient(){
+    private HttpClient createClient() {
         return HttpClient.newHttpClient();
     }
 
-    public boolean createPostRequest(String adversaryUrl, String myPort){
+    public boolean createPostRequest(String adversaryUrl, String myPort) {
         this.adversaryUrl.add(adversaryUrl);
         HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(adversaryUrl + "/api/game/start")).setHeader("Accept", "application/json").setHeader("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"1\", \"url\":\"http://localhost:" + myPort + "\", \"message\":\"hello\"}"))
             .build();
         try {
             client.sendAsync(newRequest, HttpResponse.BodyHandlers.ofString()).thenAccept(r -> System.out.println(r.statusCode()));
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Error when starting the game: " + e);
         }
         return false;
     }
 
-    public boolean createGetRequest(){
+    public boolean createGetRequest() {
         HttpRequest newRequest = HttpRequest.newBuilder()
             .uri(URI.create(adversaryUrl.get(0) + "/api/game/fire" + "?cell=" + attack.getAttack()))
             .setHeader("Accept", "application/json")
             .GET()
             .build();
         try {
-            client.sendAsync(newRequest, HttpResponse.BodyHandlers.ofString()).thenAccept(r  -> System.out.println(r.statusCode()));
+            client.sendAsync(newRequest, HttpResponse.BodyHandlers.ofString()).thenAccept(r -> System.out.println(r.statusCode()));
             return true;
-        }
-        catch(Exception exception) {
+        } catch (Exception exception) {
             System.err.println("Error when attacking: " + exception);
         }
         return false;
