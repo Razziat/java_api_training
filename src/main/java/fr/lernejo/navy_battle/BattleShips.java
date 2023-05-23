@@ -1,9 +1,10 @@
 package fr.lernejo.navy_battle;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class BattleShips {
-    final private ArrayList<BoardCells> positions;
+    final private List<BoardCells> positions;
 
     public BattleShips(int nb, int X, int Y) {
         positions = new ArrayList<>(nb);
@@ -11,7 +12,7 @@ public class BattleShips {
             Y = 7;
         if (X > 8)
             X = 8;
-        for (int i = 0; i <  2; i++) {
+        for (int i = 0; i < 2; i++) {
             savePositions(X, Y + i);
         }
         X++;
@@ -27,7 +28,7 @@ public class BattleShips {
     }
 
     public boolean isLiving() {
-        return !(positions.size() == 0);
+        return !positions.isEmpty();
     }
 
     public State isTouched(BoardCells boardCells) {
