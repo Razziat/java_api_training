@@ -1,16 +1,17 @@
 package fr.lernejo.navy_battle;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class Attack {
-    final private ArrayList<String> nextAttack;
+    final private List<String> nextAttack;
 
     public Attack() {
         nextAttack = initAttacks();
     }
 
-    private ArrayList<String> initAttacks() {
-        ArrayList<String> allAttacks = new ArrayList<>(100);
+    private List<String> initAttacks() {
+        List<String> allAttacks = new ArrayList<>(100);
         for (char c = 'A'; c <= 'J'; c++){
             for (char d = '0'; d <= '9'; d++) {
                 String firstValue = String.valueOf(c);
