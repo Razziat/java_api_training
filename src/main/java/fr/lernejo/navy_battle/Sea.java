@@ -1,20 +1,22 @@
 package fr.lernejo.navy_battle;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class Sea {
-    final private ArrayList<BattleShips> battleShips;
+    final private List<BattleShips> battleShips;
 
     public Sea() {
-        battleShips = new ArrayList<BattleShips>(5);
+        battleShips = new ArrayList<>(5);
         battleShips.add(new BattleShips(5, 0, 0));
         battleShips.add(new BattleShips(4, 3, 3));
         battleShips.add(new BattleShips(3, 9, 0));
         battleShips.add(new BattleShips(3, 0, 7));
         battleShips.add(new BattleShips(2, 6, 6));
     }
+
     public boolean isLeft() {
-        return battleShips.size() != 0;
+        return !battleShips.isEmpty();
     }
 
     public State touchedBoardCell(String boardCell) {
@@ -43,20 +45,15 @@ public class Sea {
 
     public boolean isDead() {
         int beforeUpdate = battleShips.size();
-        battleShips.forEach(ship ->
-        {
-            if (!ship.isLiving()) {
-                battleShips.remove(ship);
-            }
-        });
-        return (beforeUpdate != battleShips.size());
+        battleShips.removeIf(ship -> !ship.isLiving());
+        return beforeUpdate != battleShips.size();
     }
 
     public boolean isValidCoordinates(String boardCell) {
         if (boardCell.length() != 2)
             return false;
-        if (boardCell.charAt(0) < 'A' && boardCell.charAt(0) > 'J')
+        if (boardCell.charAt(0) < 'A' || boardCell.charAt(0) > 'J')
             return false;
-        return boardCell.charAt(1) >= '0' || boardCell.charAt(1) <= '9';
+        return boardCell.charAt(1) >= '0' && boardCell.charAt(1) <= '9';
     }
 }
